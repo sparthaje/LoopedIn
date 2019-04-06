@@ -125,6 +125,8 @@ app.post('/bills', async (req,res)=> {
     await Axios.get(endpoint)
         .then(function(response){
             console.log(response.data.results[0]);
+            result.push(response.data.results[0]);
+            result.push(response.data.results[1]);
         });
     res.json(result);
 
