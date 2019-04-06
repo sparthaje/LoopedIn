@@ -117,8 +117,18 @@ app.post('/reps', async (req,res)=>{
 
 app.post('/bills', async (req,res)=> {
     Axios.defaults.headers.common['X-API-KEY']  = pAPIKey;
+    var result = [];
 
     const topic = req.body["topic"];
+    var endpoint = `https://api.propublica.org/congress/v1/bills/subjects/${subject}.json`
+
+    await Axios.get(endpoint)
+        .then(function(response){
+            var bills = response["results"];
+            result.push(bills[0]);
+            result.push(bills[1]);
+        });
+    res.json(result);
 
 });
 
@@ -131,7 +141,7 @@ app.post('/upload', (req,res)=>{
     var sen2 = req.body["sen2"];
 
     var userRef = db.ref("/Users");
-    userRef.push({
+    userRef.set({
         "Name": name,
         "State": state,
         "Zip": zip,
