@@ -130,7 +130,7 @@ app.post('/upload', (req,res)=>{
     var sen1 = req.body["sen1"];
     var sen2 = req.body["sen2"];
 
-    var userRef = db.ref("/").child("Users").child(`${name}`);
+    var userRef = db.ref("/Users").child(`${name}`);
     userRef.set({
         "State": state,
         "Zip": zip,
