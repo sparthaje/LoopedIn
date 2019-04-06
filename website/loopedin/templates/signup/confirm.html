@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up for Looped In</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'signup/css/main.css' %}"/>
+</head>
+
+<body>
+
+<nav class="navbar navbar-light">
+    <a class="navbar-brand ml-auto mr-auto">
+        <img id="logo" src="{% static 'signup/img/logo.png' %}" width="278" height="178" alt="">
+        Looped In
+    </a>
+</nav>
+
+<div class="container-fluid subtilte">
+    <div class="row">
+        <div class="col">
+            Hi {{ NAME }}, these are your settings.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card confirm-box">
+                Your State: {{ NAME }} <br/>
+                Your State: {{ STATE }} <br/>
+                Your Zipcode: {{ ZIPCODE }} <br/>
+                Your Representative: {{ REP }} <br/>
+                Your Senators: {{ SEN_1 }} and {{ SEN_2 }} <br/>
+                Topics You Care About: {{ TOPICS }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="ml-auto mr-auto">
+                <a href="{% url 'signup:index' %}"><button type="button" class="btn btn-primary">Go Back To State/Zipcode</button></a>
+                <a href="{% url 'signup:push_handler' %}"><button type="button" class="btn btn-primary">Confirm</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

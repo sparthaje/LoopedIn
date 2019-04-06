@@ -15,7 +15,7 @@ body {
 }
 
 #next-button {
-    width:100%;
+    width: 100%;
     margin-top: 40px;
     border-color: white;
 }
@@ -26,17 +26,55 @@ body {
     color: black;
     font-size: 30px;
     width: 100%;
-}
-
-.info {
-    float: right;
-    padding-right: 40px;
+    height: 525px;
 }
 
 .rep-photo {
-    width: 8em;
-    padding: 20px;
-    float: left;
+    height: 10em;
+    max-width: 12em;
+    border-radius: 400px;
+    margin-top: 20px;
+}
+
+.info {
+    padding-left: 20px;
+    padding-bottom: 20px;
+}
+
+.subtilte {
+    font-size: 40px;
+    width: 100%;
+    text-align: center;
+    margin-top: -20px;
+}
+
+.rep-type {
+    margin-top: 10px;
+}
+
+.next {
+    background-color: rgba(0, 0, 0, 0.8);
+    margin-top: 20px;
+    text-align: center;
+}
+
+.next a {
+    color: white;
+}
+
+.confirm-box {
+    margin-top: 20px;
+    font-size: 40px;
+    padding: 40px;
+    text-align: left;
+    height: 420px;
+}
+
+.btn-primary {
+    background-color: rgb(72, 149, 248);
+    border-color: white;
+    border-width: 3px;
+    font-size: 40px;
 }
 
 @media screen and (max-width: 710px) {
