@@ -120,11 +120,12 @@ app.post('/bills', async (req,res)=> {
     var result = [];
 
     const topic = req.body["topic"];
-    var endpoint = `https://api.propublica.org/congress/v1/bills/subjects/${subject}.json`
+    var endpoint = `https://api.propublica.org/congress/v1/bills/subjects/${topic}.json`;
 
     await Axios.get(endpoint)
         .then(function(response){
             var bills = response["results"];
+            console.log(bills);
             result.push(bills[0]);
             result.push(bills[1]);
         });
@@ -137,23 +138,65 @@ app.post('/upload', (req,res)=>{
     var state = req.body["state"];
     var zip = req.body["zip"];
     var rep = req.body["rep"];
+    var repPos = req.body["repPos"];
     var sen1 = req.body["sen1"];
+    var sen1Pos = req.body["sen1Pos"];
     var sen2 = req.body["sen2"];
+    var sen2Pos = req.body["sen2Pos"];
+    var topics = req.body["topics"];
 
     var userRef = db.ref("/Users");
     userRef.set({
         "Name": name,
         "State": state,
         "Zip": zip,
-        "Representative": rep,
+        "Representative": {
+            "Name": rep,
+            "isDem": repPos
+        },
         "Senators": {
-            1: sen1,
-            2: sen2
+            0: {
+                "Name": sen1,
+                "isDem": sen1Pos
+            },
+            1: {
+                "Name": sen2,
+                "isDem": sen2Pos
+            }
+        },
+        "Topics":{
+            0: topics[0],
+            1: topics[1],
+            2: topics[2]
         }
     });
     res.end(200);
 });
 
+app.post('/get',(req,res)=>{
+    var ref = db.ref("/Users");
+    ref.once("value",(snapshot)=>{
+        res.json(snapshot);
+    })
+});
+
+
+app.get('/test',(req,res)=>{
+    console.log(`Give me a second to update your loop`);
+    var endpoint = 'https://loopedin-backend.herokuapp.com/get';
+
+    Axios.post(endpoint)
+        .then(function(response){
+            var name = response["Name"];
+            var rep = response["Representative"];
+            var senators = [ response["Senators"][0], response["Senators"][1]];
+            var topics = response["Topics"];
+
+            Axios.post('https://loopedin-backend.herokuapp.com/bills',data={"topic":topics[0]})
+
+
+        });
+});
 
 app.listen(process.env.PORT);
 module.exports = app;
