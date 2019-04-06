@@ -127,7 +127,7 @@ app.post('/bills', (req,res)=> {
 
     Axios.get(endpoint)
         .then(function(response) {
-            console.log(response.data);
+
 
             result["bills"].push(response.data.results[0]);
             result["bills"].push(response.data.results[1]);
@@ -184,24 +184,71 @@ app.post('/get',(req,res)=>{
 });
 
 
-app.get('/test',(req,res)=>{
+app.post('/test',(req,res)=>{
     console.log(`Give me a second to update your loop`);
     var endpoint = 'https://loopedin-backend.herokuapp.com/get';
 
+
     Axios.post(endpoint)
         .then(function(response){
-            var name = response["Name"];
-            var rep = response["Representative"];
-            var senators = [ response["Senators"]["0"], response["Senators"]["1"]];
-            var topics = response["Topics"];
+            var data = response.data;
+            var name = data["Name"];
+            var rep = data["Representative"];
+            var senators = [ data["Senators"]["0"], data["Senators"]["1"]];
+            var topicsTemp = data["Topics"];
+            var topics = [topicsTemp["0"], topicsTemp["1"], topicsTemp["2"]];
+            var bills = [];
 
-            Axios.post('https://loopedin-backend.herokuapp.com/bills',{"topic":`${topics[0]}`})
-                .then(function(response){
-                    var data = response.data;
-                    console.log(`${name} ${rep} ${topic[0]} ${data.title} `);
-                })
 
+            Axios.post('https://loopedin-backend.herokuapp.com/bills', {"topic": `${topics[0]}`})
+                .then(function (response1) {
+                    var data1 = response1.data["bills"];
+                    var temp = {};
+                    temp["short_title"] = data1[0]["short_title"];
+                    temp["party"] = data1[0]["sponsor_party"];
+                    if (String(data1[0]["committees"]).includes("House")) {
+                        temp["area"] = "Representatives";
+                    } else {
+                        temp["area"] = "Senators";
+                    }
+                    temp["description"] = data1[0]["summary"];
+                    bills.push(temp);
+                });
+
+            Axios.post('https://loopedin-backend.herokuapp.com/bills', {"topic": `${topics[1]}`})
+                .then(function (response1) {
+                    var data1 = response1.data["bills"];
+                    var temp = {};
+                    temp["short_title"] = data1[0]["short_title"];
+                    temp["party"] = data1[0]["sponsor_party"];
+                    if (String(data1[0]["committees"]).includes("House")) {
+                        temp["area"] = "Representatives";
+                    } else {
+                        temp["area"] = "Senators";
+                    }
+                    temp["description"] = data1[0]["summary"];
+                    bills.push(temp);
+                });
+            Axios.post('https://loopedin-backend.herokuapp.com/bills', {"topic": `${topics[2]}`})
+                .then(function (response1) {
+                    var data1 = response1.data["bills"];
+                    var temp = {};
+                    temp["short_title"] = data1[0]["short_title"];
+                    temp["party"] = data1[0]["sponsor_party"];
+                    if (String(data1[0]["committees"]).includes("House")) {
+                        temp["area"] = "Representatives";
+                    } else {
+                        temp["area"] = "Senators";
+                    }
+                    temp["description"] = data1[0]["summary"];
+                    bills.push(temp);
+                });
+            console.log(bills);
+            res.json(JSON.stringify(bills))
         });
+
+
+
 });
 
 app.listen(process.env.PORT);
