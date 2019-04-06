@@ -192,7 +192,7 @@ app.get('/test',(req,res)=>{
         .then(function(response){
             var name = response["Name"];
             var rep = response["Representative"];
-            var senators = [ response["Senators"][0], response["Senators"][1]];
+            var senators = [ response["Senators"]["0"], response["Senators"]["1"]];
             var topics = response["Topics"];
 
             Axios.post('https://loopedin-backend.herokuapp.com/bills',{"topic":`${topics[0]}`})
