@@ -6,14 +6,21 @@ var bodyParser = require('body-parser');
 var dotenv = require('dotenv').config();
 var Axios = require('axios');
 var cookieParser = require('cookie-parser');
+var admin  = require('firebase-admin');
 
+var serviceAccount = require("./serviceAccountKey.json");
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://loopedin.firebaseio.com"
+});
+
+var db = admin.database();
 var app = express();
 
 const xAPIKey = process.env.X_API_KEY;
-Axios.defaults.headers.common['X-API-KEY'] = xAPIKey;
+const pAPIKey = process.env.PROPUBLICA_API_KEY;
 
-const p2aendpoint = 'https://fmrrixuk32.execute-api.us-east-1.amazonaws.com/hacktj/legislators';
-const billendpoint = ''//FIXME add actual endpoint
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -34,6 +41,9 @@ app.use(bodyParser.urlencoded({
 app.post('/reps', async (req,res)=>{
     const state = req.body["state"];
     const zip = req.body["zip"];
+    Axios.defaults.headers.common['X-API-KEY'] = xAPIKey;
+    const p2aendpoint = 'https://fmrrixuk32.execute-api.us-east-1.amazonaws.com/hacktj/legislators';
+
     var result = {
         "Representatives": [],
         "Senators": []
@@ -90,7 +100,7 @@ app.post('/reps', async (req,res)=>{
             var socials = {};
             temp.forEach(function (platform) {
                 if(platform['identifier_type'] === "INSTAGRAM" || platform['identifier_type'] === "TWITTER" || platform["identifier_type"] === "FACEBOOK-CAMPAIGN" ){
-                    socials["identifier_type"] = platform['identifier_value'];
+                    socials[`${platform['identifier_type']}`] = platform['identifier_value'];
                 }
             });
             result["Senators"].push({
@@ -105,23 +115,33 @@ app.post('/reps', async (req,res)=>{
     res.json(result);
 });
 
-app.post('/bills',(req,res)=> {
-    const topic = req.body["topics"];
-    const params = {
-        topic: topic
-    };
-    Axios.get(billendpoint,{
-        params: params
-    }).then((response)=>{
-       var bill = response.bills;
+app.post('/bills', async (req,res)=> {
+    Axios.defaults.headers.common['X-API-KEY']  = pAPIKey;
 
-    });
-
+    const topic = req.body["topic"];
 
 });
 
+app.post('/upload', (req,res)=>{
+    var name = req.body["name"];
+    var state = req.body["state"];
+    var zip = req.body["zip"];
+    var rep = req.body["rep"];
+    var sen1 = req.body["sen1"];
+    var sen2 = req.body["sen2"];
 
-
+    var userRef = db.ref("/").child("Users").child(`${name}`);
+    userRef.set({
+        "State": state,
+        "Zip": zip,
+        "Representative": rep,
+        "Senators": {
+            1: sen1,
+            2: sen2
+        }
+    });
+    res.status(200);
+});
 
 
 app.listen(process.env.PORT);
