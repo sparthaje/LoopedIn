@@ -1,0 +1,32 @@
+body {
+    background-color: rgb(72, 149, 248);
+    color: white;
+    font-size: 60px;
+    font-family: Quicksand, sans-serif;
+}
+
+.navbar-brand {
+    font-size: 80px;
+}
+
+@media screen and (max-width: 710px) {
+    .navbar-brand {
+        font-size: 40px;
+    }
+
+    #logo {
+        width: 139px;
+        height: 89px;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .navbar-brand {
+        font-size: 40px;
+    }
+
+    #logo {
+        width: 93px;
+        height: 59px;
+    }
+}
