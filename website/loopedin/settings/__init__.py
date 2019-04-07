@@ -25,7 +25,7 @@ SECRET_KEY = 'a5mg4f%aieenu*$0k*z*8!z8rfx%861s(n1-$cmisl1p!)-pg2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["looped-in.herokuapp.com", "localhost"]
 
 try:
     from .secret import *
@@ -85,7 +85,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

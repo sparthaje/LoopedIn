@@ -15,14 +15,15 @@ def index(request):
 def home(request):
     return render(request, 'signup/home.html')
 
+
 def signup(request):
     return render(request, 'signup/signup.html')
 
 
 def topics(request):
-    tpcs = ["Guns", "Immigration", "Medicare", "Abortion", "Inequality",
-            "Racial Inequality", "Police", "Economy", "Drugs",
-            "Trade", "Taxes", "Climate", "Infrastructure", "Terrorism"]
+    tpcs = ["Immigration", "Medicare", "Abortion", "Police", "Drugs", "Trade",
+            "Climate", "Terrorism", "Education"]
+
     context = {
         "TOPICS": tpcs,
     }
@@ -128,7 +129,7 @@ def push_handler(request):
     state = request.session.get("state")
     zipcode = int(request.session.get("zipcode"))
     response = request.session.get("response")
-    topics = request.session.get("topics")
+    topics = [x.lower() for x in request.session.get("topics")]
 
     rep = response["Representatives"][0]["name"]
     repPos = response["Representatives"][0]["position"]
@@ -139,9 +140,9 @@ def push_handler(request):
 
     response = pyreq.post('https://loopedin-backend.herokuapp.com/upload',
                           data={"name": name, "state": state, "zip": zipcode,
-                                "rep": rep, "reppos": repPos, "sen1":sen1,
+                                "rep": rep, "reppos": repPos, "sen1": sen1,
                                 "sen1pos": sen1Pos, "sen2": sen2, "sen2pos": sen2Pos,
-                                "topics": [topics[0],topics[1],topics[2]]
+                                "topics": [topics[0], topics[1], topics[2]]
                                 })
 
     return HttpResponse("pushed")
