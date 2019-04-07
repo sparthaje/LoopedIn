@@ -12,6 +12,9 @@ def index(request):
     return render(request, 'signup/index.html')
 
 
+def home(request):
+    return render(request, 'signup/home.html')
+
 def signup(request):
     return render(request, 'signup/signup.html')
 
