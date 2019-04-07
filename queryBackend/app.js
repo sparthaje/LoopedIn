@@ -92,7 +92,7 @@ app.post('/reps', async (req,res)=>{
         reps.forEach(function (representative) {
             var firstName = representative['first_name'];
             var lastName = representative['last_name'];
-            var salutation = representative['salutation'];
+            //var salutation = representative['salutation'];
             var position  = representative['party'];
             var photoURL = representative['photo'];
             var website = representative['websites'][0];
@@ -104,7 +104,7 @@ app.post('/reps', async (req,res)=>{
                 }
             });
             result["Senators"].push({
-                name: `${salutation} ${firstName} ${lastName}`,
+                name: ` ${firstName} ${lastName}`,
                 position: position,
                 photoURL: photoURL,
                 web: website,
@@ -184,13 +184,14 @@ app.post('/get',(req,res)=>{
 });
 
 
-app.post('/test',(req,res)=>{
-    console.log(`Give me a second to update your loop`);
+app.post('/test',async (req,res)=>{
+    
+    var phrase = "Updating your loop. ";
+    
     var endpoint = 'https://loopedin-backend.herokuapp.com/get';
 
-
-    Axios.post(endpoint)
-        .then(function(response){
+   await Axios.post(endpoint)
+        .then(async function(response){
             var data = response.data;
             var name = data["Name"];
             var rep = data["Representative"];
@@ -198,58 +199,60 @@ app.post('/test',(req,res)=>{
             var topicsTemp = data["Topics"];
             var topics = [topicsTemp["0"], topicsTemp["1"], topicsTemp["2"]];
             var bills = [];
+            var index =  Math.floor(Math.random() * Math.floor(topics.length));
+            var index2 = Math.floor(Math.random() * Math.floor(2));
 
 
-            Axios.post('https://loopedin-backend.herokuapp.com/bills', {"topic": `${topics[0]}`})
+            await Axios.post('https://loopedin-backend.herokuapp.com/bills', {"topic": `${topics[index]}`})
                 .then(function (response1) {
                     var data1 = response1.data["bills"];
                     var temp = {};
-                    temp["short_title"] = data1[0]["short_title"];
-                    temp["party"] = data1[0]["sponsor_party"];
-                    if (String(data1[0]["committees"]).includes("House")) {
-                        temp["area"] = "Representatives";
-                    } else {
-                        temp["area"] = "Senators";
+                    temp["short_title"] = data1[index2]["short_title"];
+                    if(data1[index2]["sponsor_party"] == "D"){
+                        temp["party"] = "Democrat";
+                    }else if(data1[index2]["sponsor_party"] == "R"){
+                        temp["party"] = "Republican";
+                    }else{
+                        temp["party"] = "Independent";
                     }
-                    temp["description"] = data1[0]["summary"];
-                    bills.push(temp);
-                });
+                    if (String(data1[index2]["committees"]).includes("House")) {
+                        temp["area"] = "House of Representatives";
+                    } else {
+                        temp["area"] = "Senate";
+                    }
+                    temp["description"] = data1[index2]["summary_short"];
 
-            Axios.post('https://loopedin-backend.herokuapp.com/bills', {"topic": `${topics[1]}`})
-                .then(function (response1) {
-                    var data1 = response1.data["bills"];
-                    var temp = {};
-                    temp["short_title"] = data1[0]["short_title"];
-                    temp["party"] = data1[0]["sponsor_party"];
-                    if (String(data1[0]["committees"]).includes("House")) {
-                        temp["area"] = "Representatives";
-                    } else {
-                        temp["area"] = "Senators";
+
+                    phrase += (`Ok ${name}, here is a bill that is currently being debated in Congress that you might be interested in. `);
+                    phrase += (`The ${temp["party"]} group has introduced the ${temp["short_title"]} bill and it is currently being debated in the ${temp["area"]}. `);
+                    phrase += (`Here is a description of this bill: ${temp["description"]}. `);
+                    if(temp["area"] == "House of Representatives"){
+                        if(rep["Position"] == temp["party"]){
+                            phrase += (`It seems that your representative supports this bill. Would you like to thank Representative ${rep["Name"]} or voice your opinion to Representative ${rep["Name"]}. `);
+                        }else{
+                            phrase += (`It seems that your representative does not support this bill. Would you like to thank Representative ${rep["Name"]} or voice your opinion to Representative ${rep["Name"]}. `);
+                        }
+                    }else{
+                        if(senators[0]["Position"] != temp["party"] && senators[1]["Position"] != temp["party"]){
+                            phrase += (`It seems that none of your senators support this bill. Would you like to thank Senators ${senators[0]["Name"]} and ${senators[1]["Name"]} or voice your opinion to them? `)
+                        }else if(senators[0]["Position"] == temp["party"] && senators[1]["Position"] != temp["party"]){
+                            phrase += (`It seems that Senator ${senators[0]["Name"]} supports this bill while Senator ${senators[1]["Name"]} does not. Would you like to speak to one? `);
+                        }else if(senators[0]["Position"] != temp["party"] && senators[1]["Position"] == temp["party"]){
+                            phrase += (`It seems that Senator ${senators[1]["Name"]} supports this bill while Senator ${senators[0]["Name"]} does not. Would you like to speak to one? `);
+                        }else{
+                            phrase += (`Ift seems that none of your senators support this bill. Would you like to thank Senators ${senators[0]["Name"]} and Senator ${senators[1]["Name"]} or voice your opnion to them? `);
+
+                        }
                     }
-                    temp["description"] = data1[0]["summary"];
-                    bills.push(temp);
+
                 });
-            Axios.post('https://loopedin-backend.herokuapp.com/bills', {"topic": `${topics[2]}`})
-                .then(function (response1) {
-                    var data1 = response1.data["bills"];
-                    var temp = {};
-                    temp["short_title"] = data1[0]["short_title"];
-                    temp["party"] = data1[0]["sponsor_party"];
-                    if (String(data1[0]["committees"]).includes("House")) {
-                        temp["area"] = "Representatives";
-                    } else {
-                        temp["area"] = "Senators";
-                    }
-                    temp["description"] = data1[0]["summary"];
-                    bills.push(temp);
-                });
-            console.log(bills);
-            res.json(JSON.stringify(bills))
         });
-
-
+   res.json({"Result": phrase});
 
 });
+
+
+
 
 app.listen(process.env.PORT);
 module.exports = app;
