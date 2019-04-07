@@ -5,13 +5,15 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var dotenv = require('dotenv').config();
 var Axios = require('axios');
+var cookieParser = require('cookie-parser');
 
 var app = express();
 
 const xAPIKey = process.env.X_API_KEY;
-Axios.defaults.header.common['X-API-KEY'] = xAPIKey;
+Axios.defaults.headers.common['X-API-KEY'] = xAPIKey;
 
-const endpoint = 'https://fmrrixuk32.execute-api.us-east-1.amazonaws.com/hacktj/legislators'
+const p2aendpoint = 'https://fmrrixuk32.execute-api.us-east-1.amazonaws.com/hacktj/legislators';
+const billendpoint = ''//FIXME add actual endpoint
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -25,26 +27,26 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.post('/representatives',(req,res)=>{
-    const state = req.body.state;
-    const zip = req.body.zip;
-    var result = {
-        "Representatives":[
-        ],
-        "Senators":{
-            "":{
+/*app.use(function(req, res, next) {
+    next(createError(404));
+});*/
 
-            }
-        }
+app.post('/reps', async (req,res)=>{
+    const state = req.body["state"];
+    const zip = req.body["zip"];
+    var result = {
+        "Representatives": [],
+        "Senators": []
     };
     var params = {
         level: 'NATIONAL_LOWER',
         address: `${state} ${zip}`
     };
-    Axios.get(endpoint,{
+    await Axios.get(p2aendpoint,{
         params: params
     }).then(function (response) {
         var reps = response.data.officials;
+        console.log(reps);
         reps.forEach(function (representative) {
             var firstName = representative['first_name'];
             var lastName = representative['last_name'];
@@ -67,14 +69,16 @@ app.post('/representatives',(req,res)=>{
                 social: socials
             });
         });
-    };
+    });
     params = {
         level: "NATIONAL_UPPER",
-        address: `${address} ${zip}`;
-}
-    Axios.get(endpoint,{
+        address: `${state} ${zip}`
+    };
+    await Axios.get(p2aendpoint,{
         params: params
-    }).then((representative) =>{
+    }).then((response) =>{
+        var reps = response.data.officials;
+        console.log(reps.length);
         reps.forEach(function (representative) {
             var firstName = representative['first_name'];
             var lastName = representative['last_name'];
@@ -90,7 +94,7 @@ app.post('/representatives',(req,res)=>{
                 }
             });
             result["Senators"].push({
-                name: `${salutation} ${firstName} ${lastName}`
+                name: `${salutation} ${firstName} ${lastName}`,
                 position: position,
                 photoURL: photoURL,
                 web: website,
@@ -101,11 +105,24 @@ app.post('/representatives',(req,res)=>{
     res.json(result);
 });
 
+app.post('/bills',(req,res)=> {
+    const topic = req.body["topics"];
+    const params = {
+        topic: topic
+    };
+    Axios.get(billendpoint,{
+        params: params
+    }).then((response)=>{
+       var bill = response.bills;
 
-app.use(function(req, res, next) {
-    next(createError(404));
+    });
+
+
 });
 
 
 
+
+
+app.listen(process.env.PORT);
 module.exports = app;
