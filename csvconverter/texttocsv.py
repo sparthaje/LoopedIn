@@ -5,7 +5,7 @@ import os.path
 directory = "/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/business"
 #summarydirectory = "/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/sum/business"
 x=01;
-mycsv = csv.writer(open('businessoutput.csv', 'w'))
+mycsv = csv.writer(open('hello.csv', 'w'))
 mycsv.writerow(['Header', 'Original', 'Summary'])
 for filename in os.listdir(directory):
 	if x  >= 511:
@@ -38,6 +38,109 @@ for filename in os.listdir(directory):
 		summ += line2
 	mycsv.writerow([head, ori, summ])
 	x = x+1
+x=0
+directory = "/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/entertainment"
+x=01;
+for filename in os.listdir(directory):
+	if x  >= 511:
+		break
+	if x < 10:
+		text_file = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/entertainment/00" + str(x) + ".txt", mode='r')	
+	elif x<100:
+		text_file = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/entertainment/0" + str(x) + ".txt", mode='r')
+	else:
+		text_file = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/entertainment/" + str(x) + ".txt", mode='r')
+	
+	lines = text_file.readlines()
+	text_file.close() 
+
+
+	head = lines[0];
+	ori = ""
+	for line in lines:
+		ori +=line;
+	if x < 10:	
+		text_file2 = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/sum/entertainment/00" + str(x) + ".txt", mode='r')
+	elif x < 100:
+		text_file2 = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/sum/entertainment/0" + str(x) + ".txt", mode='r')
+	else:
+			text_file2 = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/sum/entertainment/" + str(x) + ".txt", mode='r')		
+	lines2 = text_file2.readlines()
+	summ = ""
+	for line2 in lines2:
+		summ += line2
+	mycsv.writerow([head, ori, summ])
+	x = x+1
+x=0
+directory = "/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/politics"
+x=01;
+for filename in os.listdir(directory):
+	if x  >= 511:
+		break
+	if x < 10:
+		text_file = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/politics/00" + str(x) + ".txt", mode='r')	
+	elif x<100:
+		text_file = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/politics/0" + str(x) + ".txt", mode='r')
+	else:
+		text_file = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/politics/" + str(x) + ".txt", mode='r')
+	
+	lines = text_file.readlines()
+	text_file.close() 
+
+
+	head = lines[0];
+	ori = ""
+	for line in lines:
+		ori +=line;
+	if x < 10:	
+		text_file2 = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/sum/politics/00" + str(x) + ".txt", mode='r')
+	elif x < 100:
+		text_file2 = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/sum/politics/0" + str(x) + ".txt", mode='r')
+	else:
+			text_file2 = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/sum/politics/" + str(x) + ".txt", mode='r')		
+	lines2 = text_file2.readlines()
+	summ = ""
+	for line2 in lines2:
+		summ += line2
+	mycsv.writerow([head, ori, summ])
+	x = x+1	
+x=0
+directory = "/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/tech"
+x=01;
+for filename in os.listdir(directory):
+	if x  >= 511:
+		break
+	if x < 10:
+		text_file = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/tech/00" + str(x) + ".txt", mode='r')	
+	elif x<100:
+		text_file = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/tech/0" + str(x) + ".txt", mode='r')
+	else:
+		text_file = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/na/tech/" + str(x) + ".txt", mode='r')
+	
+	lines = text_file.readlines()
+	text_file.close() 
+
+
+	head = lines[0];
+	ori = ""
+	for line in lines:
+		ori +=line;
+	if x < 10:	
+		text_file2 = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/sum/tech/00" + str(x) + ".txt", mode='r')
+	elif x < 100:
+		text_file2 = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/sum/tech/0" + str(x) + ".txt", mode='r')
+	else:
+		text_file2 = open("/Users/sakethkura/Documents/HackTJ/LoopedIn/csvconverter/bbc/sum/tech/" + str(x) + ".txt", mode='r')		
+	lines2 = text_file2.readlines()
+	summ = ""
+	for line2 in lines2:
+		summ += line2
+	mycsv.writerow([head, ori, summ])
+	x = x+1		
+
+
+
+
 		
 
 	
