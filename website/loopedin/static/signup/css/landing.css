@@ -1,0 +1,31 @@
+body {
+    background-color: #eeeeee;
+    font-family: Quicksand, sans-serif;
+}
+
+.card {
+    background-color: white;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, .20), -2px -2px 8px rgba(20, 20, 20, .14);
+    color: black;
+    font-size: 30px;
+    margin-top: 20px;
+}
+
+#username {
+    color: rgb(50, 128, 229);
+    font-size: 40px;
+    padding: 20px;
+}
+
+.rep-info {
+    padding: 20px;
+}
+
+#logo {
+    width: 4em;
+}
+
+.navbar {
+    background-color: rgb(72, 149, 248);
+    color: white;
+}

@@ -16,6 +16,10 @@ def home(request):
     return render(request, 'signup/home.html')
 
 
+def signin(request):
+    return render(request, 'signup/signin.html')
+
+
 def signup(request):
     return render(request, 'signup/signup.html')
 
@@ -112,6 +116,36 @@ def user_handler(request):
     return HttpResponseRedirect("/info")
 
 
+def dashboard(request):
+    username, password = request.POST["username"], request.POST["password"]
+    user = authenticate(request, username=username, password=password)
+
+    state = request.session.get("state")
+    zipcode = int(request.session.get("zipcode"))
+    response = request.session.get("response")
+    topics = request.session.get("topics")
+
+    rep = response["Representatives"][0]["name"]
+    repPos = response["Representatives"][0]["position"]
+    sen1 = response["Senators"][0]["name"]
+    sen1Pos = response["Representatives"][0]["position"]
+    sen2 = response["Senators"][1]["name"]
+    sen2Pos = response["Representatives"][0]["position"]
+
+    context = {
+        'USERNAME': username,
+        "REP": rep,
+        "REP_PARTY": repPos,
+        "SEN1": sen1,
+        "SEN1_PARTY": sen1Pos,
+        "SEN2": sen2,
+        "SEN2_PARTY": sen2Pos,
+        "TOPICS": topics
+    }
+
+    return render(request, 'signup/landing.html', context=context)
+
+
 def topics_handler(request):
     topics = []
     z = 0
@@ -129,7 +163,7 @@ def push_handler(request):
     state = request.session.get("state")
     zipcode = int(request.session.get("zipcode"))
     response = request.session.get("response")
-    topics = [x.lower() for x in request.session.get("topics")]
+    topics = request.session.get("topics")
 
     rep = response["Representatives"][0]["name"]
     repPos = response["Representatives"][0]["position"]
@@ -145,4 +179,15 @@ def push_handler(request):
                                 "topics": [topics[0], topics[1], topics[2]]
                                 })
 
-    return HttpResponse("pushed")
+    context = {
+        'USERNAME': request.user.username,
+        "REP": rep,
+        "REP_PARTY": repPos,
+        "SEN1": sen1,
+        "SEN1_PARTY": sen1Pos,
+        "SEN2": sen2,
+        "SEN2_PARTY": sen2Pos,
+        "TOPICS": topics
+    }
+
+    return render(request, 'signup/landing.html', context=context)

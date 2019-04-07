@@ -54,10 +54,12 @@
             <img id="logo" src="{% static 'signup/img/logo.png' %}" alt="">
             <div id="title">Looped In</div>
             <br/><br/>
+            <a href="{% url 'signup:signin' %}">
+                <button type="button" class="btn btn-primary">Login</button>
+            </a>
             <a href="{% url 'signup:signup' %}">
                 <button type="button" class="btn btn-primary">Sign Up</button>
             </a>
-            <button type="button" onclick="scroll();" class="btn btn-primary" id="learn-more">Learn More</button>
         </div>
     </div>
 </div>
