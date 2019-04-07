@@ -115,19 +115,24 @@ app.post('/reps', async (req,res)=>{
     res.json(result);
 });
 
-app.post('/bills', async (req,res)=> {
+app.post('/bills', (req,res)=> {
     Axios.defaults.headers.common['X-API-KEY']  = pAPIKey;
-    var result = [];
+    var result = {
+        "bills": []
+    };
+
 
     const topic = req.body["topic"];
     var endpoint = `https://api.propublica.org/congress/v1/bills/subjects/${topic}.json`;
 
-    await Axios.get(endpoint)
-        .then(function(response){
-            console.log(response.data.results[0]);
-        });
-    res.json(result);
+    Axios.get(endpoint)
+        .then(function(response) {
+            console.log(response.data);
 
+            result["bills"].push(response.data.results[0]);
+            result["bills"].push(response.data.results[1]);
+            res.json(result);
+        });
 });
 
 app.post('/upload', (req,res)=>{
@@ -135,11 +140,11 @@ app.post('/upload', (req,res)=>{
     var state = req.body["state"];
     var zip = req.body["zip"];
     var rep = req.body["rep"];
-    var repPos = req.body["repPos"];
+    var repPos = req.body["reppos"];
     var sen1 = req.body["sen1"];
-    var sen1Pos = req.body["sen1Pos"];
+    var sen1Pos = req.body["sen1pos"];
     var sen2 = req.body["sen2"];
-    var sen2Pos = req.body["sen2Pos"];
+    var sen2Pos = req.body["sen2pos"];
     var topics = req.body["topics"];
 
     var userRef = db.ref("/Users");
@@ -149,16 +154,16 @@ app.post('/upload', (req,res)=>{
         "Zip": zip,
         "Representative": {
             "Name": rep,
-            "isDem": repPos
+            "Position": repPos
         },
         "Senators": {
             0: {
                 "Name": sen1,
-                "isDem": sen1Pos
+                "Position": sen1Pos
             },
             1: {
                 "Name": sen2,
-                "isDem": sen2Pos
+                "Position": sen2Pos
             }
         },
         "Topics":{
@@ -167,7 +172,8 @@ app.post('/upload', (req,res)=>{
             2: topics[2]
         }
     });
-    res.end(200);
+    res.status(200);
+    res.end();
 });
 
 app.post('/get',(req,res)=>{
@@ -186,11 +192,14 @@ app.get('/test',(req,res)=>{
         .then(function(response){
             var name = response["Name"];
             var rep = response["Representative"];
-            var senators = [ response["Senators"][0], response["Senators"][1]];
+            var senators = [ response["Senators"]["0"], response["Senators"]["1"]];
             var topics = response["Topics"];
 
-            Axios.post('https://loopedin-backend.herokuapp.com/bills',data={"topic":topics[0]})
-
+            Axios.post('https://loopedin-backend.herokuapp.com/bills',{"topic":`${topics[0]}`})
+                .then(function(response){
+                    var data = response.data;
+                    console.log(`${name} ${rep} ${topic[0]} ${data.title} `);
+                })
 
         });
 });
