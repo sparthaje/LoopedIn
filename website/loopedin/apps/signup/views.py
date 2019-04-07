@@ -7,12 +7,46 @@ import requests as pyreq
 
 import json
 
+
 def index(request):
     return render(request, 'signup/index.html')
 
 
+def home(request):
+    return render(request, 'signup/home.html')
+
 def signup(request):
     return render(request, 'signup/signup.html')
+
+
+def topics(request):
+    tpcs = ["Guns", "Immigration", "Medicare", "Abortion", "Inequality",
+            "Racial Inequality", "Police", "Economy", "Drugs",
+            "Trade", "Taxes", "Climate", "Infrastructure", "Terrorism"]
+    context = {
+        "TOPICS": tpcs,
+    }
+
+    return render(request, 'signup/topics.html', context=context)
+
+
+def confirm(request):
+    state = request.session.get("state")
+    zipcode = request.session.get("zipcode")
+    response = request.session.get("response")
+    topics = request.session.get("topics")
+
+    context = {
+        "NAME": request.user.username,
+        "STATE": state,
+        "ZIPCODE": zipcode,
+        "REP": response["Representatives"][0]["name"],
+        "SEN_1": response["Senators"][0]["name"],
+        "SEN_2": response["Senators"][1]["name"],
+        "TOPICS": str(topics).replace('\'', '').replace('[', '').replace(']', '')
+    }
+
+    return render(request, "signup/confirm.html", context=context)
 
 
 def congress(request):
@@ -52,7 +86,7 @@ def zip_handler(request):
     state = request.POST["state"]
     zipcode = request.POST["zipcode"]
     response = pyreq.post('https://loopedin-backend.herokuapp.com/reps',
-                                  data={"state": state, "zip": zipcode})
+                          data={"state": state, "zip": zipcode})
 
     request.session['state'] = state
     request.session['zipcode'] = zipcode
@@ -77,8 +111,37 @@ def user_handler(request):
     return HttpResponseRedirect("/info")
 
 
-"""
-response = requests.post('https://loopedin-backend.herokuapp.com/reps',data={"state":[state],"zip":[zip]})
-response = response.content
+def topics_handler(request):
+    topics = []
+    z = 0
+    for i in list(request.POST.items()):
+        if not z == 0:
+            topics.append(i[0])
+        z += 1
 
-"""
+    request.session['topics'] = topics
+    return HttpResponseRedirect("/confirm")
+
+
+def push_handler(request):
+    name = request.user.username
+    state = request.session.get("state")
+    zipcode = int(request.session.get("zipcode"))
+    response = request.session.get("response")
+    topics = request.session.get("topics")
+
+    rep = response["Representatives"][0]["name"]
+    repPos = response["Representatives"][0]["position"]
+    sen1 = response["Senators"][0]["name"]
+    sen1Pos = response["Representatives"][0]["position"]
+    sen2 = response["Senators"][1]["name"]
+    sen2Pos = response["Representatives"][0]["position"]
+
+    response = pyreq.post('https://loopedin-backend.herokuapp.com/upload',
+                          data={"name": name, "state": state, "zip": zipcode,
+                                "rep": rep, "reppos": repPos, "sen1":sen1,
+                                "sen1pos": sen1Pos, "sen2": sen2, "sen2pos": sen2Pos,
+                                "topics": [topics[0],topics[1],topics[2]]
+                                })
+
+    return HttpResponse("pushed")
