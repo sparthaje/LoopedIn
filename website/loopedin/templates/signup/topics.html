@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign Up for Looped In</title>
+    <script type="text/javascript">
+        function changeColor(id, newColor) {
 
+            var labelObject = document.getElementById(id);
+
+            $("#" + id).css("color", newColor);
+            $("#" + id).css("font-size", 40);
+        }
+    </script>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -35,29 +43,24 @@
 
 <div class="container-fluid subtilte">
     <div class="row">
-        <div class="col">
-            Pick the topics that you care about:
+        <div class="col-12">
+            Click the topics that you care about:
         </div>
-        <form action="{% url 'signup:topics_handler' %}" method="post" id="form">
-            {% csrf_token %}
-            {% for TOPIC in TOPICS %}
-            <input type="radio" name="{{ TOPIC }}"/> {{ TOPIC }}
-            {% endfor %}
-            <input type="submit" value="Next" id="next-button">
-        </form>
+        <div class="col-4 ml-auto mr-auto" id="topics-info">
+            <form action="{% url 'signup:topics_handler' %}" method="post" id="form" class="card">
+                {% csrf_token %}
+                {% for TOPIC in TOPICS %}
+                <input type="radio" name="{{ TOPIC }}" id="{{ TOPIC }}" class="topic-radio"> <label for="{{ TOPIC }}" id="{{TOPIC}}-label"
+                                                                                                    onclick="return changeColor('{{TOPIC}}-label', 'rgb(50, 128, 229)')">
+                {{ TOPIC }}</label> </input>
+                {% endfor %}
+                <input type="submit" value="Next" id="next-button">
+            </form>
+        </div>
 
     </div>
 </div>
-
-<a href="{% url 'signup:confirm' %}" style="color: white;">
-    <div class="container-fluid next">
-        <div class="row">
-            <div class="col">
-                Next
-            </div>
-        </div>
-    </div>
-</a>
+<br/>
 
 </body>
 </html>

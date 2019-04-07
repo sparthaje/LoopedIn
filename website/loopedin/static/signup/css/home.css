@@ -11,15 +11,43 @@ body {
 
 #logo {
     width: 20em;
+    margin-left: 10px;
 }
 
 #bg {
+    height: 58vw;
     background-image: url("https://umcomplianceenv2.blob.core.windows.net/umcognatecsetest/PS_0010_USCongress.jpg");
-    height: 40vw;
     background-size: cover;
     box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.6);
-    background-size: cover;
     background-attachment: fixed;
+}
+
+#bg-2 {
+    height: 50vw;
+    background-image: url("https://www.gannett-cdn.com/-mm-/0cf0cbe79e52de6710f9e1589d9d8f991933bfcc/c=0-405-4808-3121/local/-/media/2018/04/03/USATODAY/USATODAY/636583167376650155-AP-TEACHER-PROTESTS-98881082.JPG?width=3200&height=1680&fit=crop");
+    background-size: cover;
+    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.2);
+    background-attachment: fixed;
+}
+
+#bg-3 {
+    height: 50vw;
+    background-image: url("https://cdn.cnn.com/cnnnext/dam/assets/180221210754-02-parkland-town-hall-rubio-with-students.jpg");
+    background-size: cover;
+    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.2);
+    background-attachment: fixed;
+}
+
+#bg-4 {
+    height: 50vw;
+    background-image: url("https://storage.googleapis.com/afs-prod/media/media:6e186fbeb8ba48358df37ac88e3499dd/2000.jpeg");
+    background-size: cover;
+    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.2);
+    background-attachment: fixed;
+}
+
+#learn-more {
+    margin-left: 40px;
 }
 
 #title {
@@ -31,7 +59,7 @@ body {
     float: none;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 3%;
+    margin-top: 15%;
 }
 
 .btn-primary {
@@ -44,4 +72,13 @@ body {
 .hidden-button {
     display: none;
     visibility: hidden;
+}
+
+#about {
+    background-image: url("https://shemovesmedotcom.files.wordpress.com/2015/08/uspreamble6w96.jpg?w=660");
+    background-size: cover;
+    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.6);
+    background-attachment: fixed;
+    width: 100%;
+    height: 10em;
 }

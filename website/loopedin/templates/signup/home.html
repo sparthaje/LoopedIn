@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up for Looped In</title>
+    <title>Looped In</title>
+
+    <script type="">
+        function scroll() {
+            window.scrollBy(100, 0);
+        }
+    </script>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -20,6 +26,22 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 
+    <!-- Jquery -->
+    <script src="jquery-3.3.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            // fade in #back-top
+            $(function () {
+                // scroll body to 0px on click
+                $('#learn-more a').click(function () {
+                    $('body,html').animate({scrollTop: $elem.height()}, 800);
+                    return false;
+                });
+            });
+
+        });
+    </script>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'signup/css/home.css' %}"/>
 </head>
@@ -27,33 +49,40 @@
 <body>
 
 <div class="container-fluid" id="bg">
-    <nav class="navbar navbar-light">
-        <a href="{% url 'signup:push_handler' %}">
-            <button type="button" class="btn btn-primary">Sign Up</button>
-        </a>
-    </nav>
     <div class="row">
         <div class="center">
             <img id="logo" src="{% static 'signup/img/logo.png' %}" alt="">
             <div id="title">Looped In</div>
+            <br/><br/>
+            <a href="{% url 'signup:signup' %}">
+                <button type="button" class="btn btn-primary">Sign Up</button>
+            </a>
+            <button type="button" onclick="scroll();" class="btn btn-primary" id="learn-more">Learn More</button>
         </div>
     </div>
 </div>
 
 
-<div class="container-fluid">
-    <div class="alert alert-primary" role="alert">
-        This is a primary alert—check it out!
-    </div>
-    <div class="alert alert-primary" role="alert">
-        This is a primary alert—check it out!
-    </div>
-    <div class="alert alert-primary" role="alert">
-        This is a primary alert—check it out!
+<div class="container-fluid" id="bg-2">
+    <div class="row">
+        <div class="center">
+        </div>
     </div>
 </div>
 
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<div class="container-fluid" id="bg-3">
+    <div class="row">
+        <div class="center">
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" id="bg-4">
+    <div class="row">
+        <div class="center">
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
