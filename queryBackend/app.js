@@ -131,7 +131,7 @@ app.post('/upload', (req,res)=>{
     var sen2 = req.body["sen2"];
 
     var userRef = db.ref("/Users");
-    userRef.set({
+    userRef.push({
         "Name": name,
         "State": state,
         "Zip": zip,
@@ -141,7 +141,7 @@ app.post('/upload', (req,res)=>{
             2: sen2
         }
     });
-    res.status(200);
+    res.end(200);
 });
 
 
