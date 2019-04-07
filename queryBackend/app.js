@@ -130,8 +130,8 @@ app.post('/upload', (req,res)=>{
     var sen1 = req.body["sen1"];
     var sen2 = req.body["sen2"];
 
-    var userRef = db.ref("/Users").child(`${name}`);
-    userRef.set({
+    var userRef = db.ref("/Users");
+    userRef.push({
         "State": state,
         "Zip": zip,
         "Representative": rep,
