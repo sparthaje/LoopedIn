@@ -9,14 +9,16 @@ import json
 
 import twitter
 
+import random
 
-def get_statuses(handle):
+
+def get_statuses(handle, name):
     api = twitter.Api(consumer_key='BrnetNOFaxbX6BBUP3Wo5TxQP',
                       consumer_secret='Ad2595WWCX3Pku0XmuWTayGMIbvB6ybz5FtaF8HR73Blv1mXWf',
                       access_token_key='863915107327332352-ePJUbRQ5PXbIBOh8b85H65kyRVESeOM',
                       access_token_secret='O4QB85msD0bBcojnA8rKwKIbhX6QGONo3ZLt3u3OpY15f')
     statuses = api.GetUserTimeline(screen_name=handle)
-    return [s.text for s in statuses]
+    return [(name, s.text) for s in statuses]
 
 
 def index(request):
@@ -124,12 +126,17 @@ def user_handler(request):
     new_user = User.objects.create_user(username=username, password=password, email=email)
     new_user.save()
     login(request, new_user)
+    authenticate(request, username=username, password=password)
     return HttpResponseRedirect("/info")
 
 
 def dashboard(request):
-    username, password = request.POST["username"], request.POST["password"]
-    user = authenticate(request, username=username, password=password)
+    try:
+        username, password = request.POST["username"], request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+    except:
+        username = request.user.username
+        pass
 
     state = request.session.get("state")
     zipcode = int(request.session.get("zipcode"))
@@ -143,7 +150,31 @@ def dashboard(request):
     sen2 = response["Senators"][1]["name"]
     sen2Pos = response["Representatives"][0]["position"]
 
+    totalTweets = []
+
+    try:
+        statusesR = get_statuses(response["Representatives"][0]["social"]['TWITTER'], rep)
+        totalTweets.extend(statusesR)
+    except:
+        pass
+
+    try:
+        statusesS1 = get_statuses(response["Senators"][0]["social"]['TWITTER'], sen1)
+        totalTweets.extend(statusesS1)
+    except:
+        pass
+
+    try:
+        statusesS2 = get_statuses(response["Senators"][1]["social"]['TWITTER'], sen2)
+        totalTweets.extend(statusesS2)
+    except:
+        pass
+
+    random.shuffle(totalTweets)
+
     context = {
+        "STATE": state,
+        "ZIPCODE": zipcode,
         'USERNAME': username,
         "REP": rep,
         "REP_PARTY": repPos,
@@ -151,7 +182,8 @@ def dashboard(request):
         "SEN1_PARTY": sen1Pos,
         "SEN2": sen2,
         "SEN2_PARTY": sen2Pos,
-        "TOPICS": topics
+        "TOPICS": topics,
+        "TWEETS": totalTweets,
     }
 
     return render(request, 'signup/landing.html', context=context)
@@ -190,15 +222,4 @@ def push_handler(request):
                                 "topics": [topics[0], topics[1], topics[2]]
                                 })
 
-    context = {
-        'USERNAME': request.user.username,
-        "REP": rep,
-        "REP_PARTY": repPos,
-        "SEN1": sen1,
-        "SEN1_PARTY": sen1Pos,
-        "SEN2": sen2,
-        "SEN2_PARTY": sen2Pos,
-        "TOPICS": topics
-    }
-
-    return render(request, 'signup/landing.html', context=context)
+    return HttpResponseRedirect("/dashboard")
