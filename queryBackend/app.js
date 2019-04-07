@@ -124,10 +124,7 @@ app.post('/bills', async (req,res)=> {
 
     await Axios.get(endpoint)
         .then(function(response){
-            var bills = response["results"];
-            console.log(bills);
-            result.push(bills[0]);
-            result.push(bills[1]);
+            console.log(response.data.results[0]);
         });
     res.json(result);
 
