@@ -7,6 +7,17 @@ import requests as pyreq
 
 import json
 
+import twitter
+
+
+def get_statuses(handle):
+    api = twitter.Api(consumer_key='BrnetNOFaxbX6BBUP3Wo5TxQP',
+                      consumer_secret='Ad2595WWCX3Pku0XmuWTayGMIbvB6ybz5FtaF8HR73Blv1mXWf',
+                      access_token_key='863915107327332352-ePJUbRQ5PXbIBOh8b85H65kyRVESeOM',
+                      access_token_secret='O4QB85msD0bBcojnA8rKwKIbhX6QGONo3ZLt3u3OpY15f')
+    statuses = api.GetUserTimeline(screen_name=handle)
+    return [s.text for s in statuses]
+
 
 def index(request):
     return render(request, 'signup/index.html')
