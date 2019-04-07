@@ -36,12 +36,12 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <form action="{% url 'signup:zip_handler' %}" method="post" id="form">
+            <form action="{% url 'signup:user_handler' %}" method="post" id="form">
                 {% csrf_token %}
-                <input type="text" class="form-control" name="state"
-                       placeholder="State" autocomplete="off" style="margin-top: 50px;">
-                <input type="text" class="form-control" name="zipcode"
-                       placeholder="Enter your zip code here" autocomplete="off" style="margin-top: 40px;">
+                <input type="text" class="form-control" name="username"
+                       placeholder="Username" autocomplete="off" style="margin-top: 50px;">
+                <input type="password" class="form-control" name="password"
+                       placeholder="Password" autocomplete="off" style="margin-top: 40px;">
                 <input type="submit" value="Next" id="next-button">
             </form>
         </div>

@@ -33,19 +33,43 @@
     </a>
 </nav>
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col">
-            <form action="{% url 'signup:zip_handler' %}" method="post" id="form">
-                {% csrf_token %}
-                <input type="text" class="form-control" name="state"
-                       placeholder="State" autocomplete="off" style="margin-top: 50px;">
-                <input type="text" class="form-control" name="zipcode"
-                       placeholder="Enter your zip code here" autocomplete="off" style="margin-top: 40px;">
-                <input type="submit" value="Next" id="next-button">
-            </form>
+        <div class="col-6">
+            <!-- REP INFO -->
+            <div class="card">
+                <img class="rep-photo" src="{{ REP_PHOTO }}">
+                <br/>
+                <div class="name info">Name</div> <br/>
+                <div class="party info">Democratic</div> <br/>
+                <div class="website info">Democratic</div> <br/>
+            </div>
+        </div>
+        <div class="col6">
+            <!-- SEN 1 INFO -->
+            <div class="card">
+                <img class="rep-photo" src="{{ SEN_1_PHOTO }}">
+                <br/>
+                <div class="name info">Name</div> <br/>
+                <div class="party info">Democratic</div> <br/>
+                <div class="website info">Democratic</div> <br/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6">
+            <!-- SEN 2 INFO -->
+            <div class="card">
+                <img class="rep-photo" src="{{ SEN_2_PHOTO }}">
+                <br/>
+                <div class="name info">Name</div> <br/>
+                <div class="party info">Democratic</div> <br/>
+                <div class="website info">Democratic</div> <br/>
+            </div>
         </div>
     </div>
 </div>
+
 </body>
 </html>
